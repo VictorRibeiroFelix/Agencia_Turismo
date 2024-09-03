@@ -1,0 +1,3 @@
+C:/TI/C++/Begosso/arquivo_indexado/agencia_turismo/cmake-build-debug/CMakeFiles/agencia_turismo.dir
+C:/TI/C++/Begosso/arquivo_indexado/agencia_turismo/cmake-build-debug/CMakeFiles/edit_cache.dir
+C:/TI/C++/Begosso/arquivo_indexado/agencia_turismo/cmake-build-debug/CMakeFiles/rebuild_cache.dir
