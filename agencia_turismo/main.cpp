@@ -34,7 +34,7 @@ struct guias{
     char telefone[11];
     int codigo_cidade;
     int pacote;
-    int status;
+    int status =0;
 };
 
 struct indice_guia {
@@ -90,7 +90,7 @@ struct indice_venda {
 
 void leitura_pais(paises pais[], int &cont){
     int i=0;
-    for (int saida = 1; i < 10 && saida !=0 ; i++) {
+    for (int saida = 1; i < 4 && saida !=0 ; i++) {
         cout <<"\n\nCodigo Pais " <<(i+1) <<": ";
         cin >> pais[i].codigo_pais;
         if(pais[i].codigo_pais > 0){
@@ -114,7 +114,7 @@ void lei_ind_pais(indice_pais idx_pais[], int cont){
 }
 
 int busca_pais( indice_pais idx_pais[],  paises pais[], int &cont, int cod){
-    int i = 0, f = cont;
+    int i = 0, f = cont-1;
     int m = (i + f) / 2;
     for (; f >= i && cod != idx_pais[m].codigo_pais; m = (i + f) / 2){
         if (cod > idx_pais[m].codigo_pais)
@@ -134,11 +134,11 @@ int busca_pais( indice_pais idx_pais[],  paises pais[], int &cont, int cod){
         return -1;
 }
 
-void leitura_cid(cidade cid[], indice_pais indx[], paises pais[], int &cont){
+void leitura_cid(cidade cid[], indice_pais indx[], paises pais[], int &cont, int &cont_pais){
     int i=0;
     int posicaoPais;
     int novoPais;
-    for (int saida = 1; i < 10 && saida !=0 ; i++) {
+    for (int saida = 1; i < 4 && saida !=0 ; i++) {
         cout <<"\n\nCodigo Cidade " <<(i+1) <<": ";
         cin >> cid[i].codigo_cidade;
         if(cid[i].codigo_cidade > 0){
@@ -146,11 +146,12 @@ void leitura_cid(cidade cid[], indice_pais indx[], paises pais[], int &cont){
             cin >> cid[i].nome;
             cout << "\nCodigo Pais: ";
             cin >> posicaoPais;
-           novoPais= busca_pais(indx,pais,cont ,posicaoPais );
+           novoPais= busca_pais(indx,pais,cont_pais ,posicaoPais );
             if (novoPais == -1) {
                 cout << "\n\nCodigo invalido";
+                cout << "\nCodigo Pais: ";
                 cin >> posicaoPais;
-                novoPais = busca_pais(indx,pais,cont ,posicaoPais );;
+                novoPais = busca_pais(indx,pais,cont_pais ,posicaoPais );;
             }else{
                 cid[i].codigo_pais = pais[novoPais].codigo_pais;
             }
@@ -163,7 +164,6 @@ void leitura_cid(cidade cid[], indice_pais indx[], paises pais[], int &cont){
     cont = i-1;
 }
 
-
 void lei_ind_cid(indice_cid idx_cid[], int cont){
     for (int i = 0; i < cont; i++) {
         cout << "\n\nCodigo do Indice " << (i+1) << ": ";
@@ -175,7 +175,7 @@ void lei_ind_cid(indice_cid idx_cid[], int cont){
 }
 
 int busca_cid ( indice_cid idx_cid[], cidade cid[], int &cont, int cod){
-    int i = 0, f = cont;
+    int i = 0, f = cont-1;
     int m = (i + f) / 2;
     for (; f >= i && cod != idx_cid[m].codigo_cidade; m = (i + f) / 2){
         if (cod > idx_cid[m].codigo_cidade)
@@ -190,18 +190,18 @@ int busca_cid ( indice_cid idx_cid[], cidade cid[], int &cont, int cod){
         cout << "\nNome: " << cid[i].nome;
         cout << "\nCodigo Pais: " << cid[i].codigo_pais;
         cout << "\nEstado: "<< cid[i].uf;
-        return m;
+        return i;
     }
     else
         cout << "\n\n Cidade nao Encontrado";
         return -1;
 }
 
-void leitura_guia(guias guia[],indice_cid indx[], cidade cid[], int &cont){
+void leitura_guia(guias guia[],indice_cid indx[], cidade cid[], int &cont, int &cont_cid){
     int i=0;
     int posicaoCid;
     int novoCid;
-    for (int saida = 1; i < 10 && saida !=0 ; i++) {
+    for (int saida = 1; i < 4 && saida !=0 ; i++) {
         cout <<"\n\nCodigo Guia " <<(i+1) <<": ";
         cin >> guia[i].codigo_guia;
         if(guia[i].codigo_guia > 0){
@@ -209,11 +209,12 @@ void leitura_guia(guias guia[],indice_cid indx[], cidade cid[], int &cont){
             cin >> guia[i].nome;
             cout << "\nCodigo Cidade: ";
             cin >> posicaoCid;
-            novoCid= busca_cid(indx,cid,cont ,posicaoCid );
+            novoCid= busca_cid(indx,cid,cont_cid ,posicaoCid );
             if (novoCid == -1) {
-                cout << "\n\nCodigo invalido";
-                cin >> posicaoCid;
-                novoCid = busca_cid(indx,cid,cont ,posicaoCid );
+               cout << "\n\nCodigo invalido";
+               cout << "\nCodigo Cidade: ";
+               cin >> posicaoCid;
+               novoCid = busca_cid(indx,cid,cont_cid ,posicaoCid );
             }else{
                 guia[i].codigo_cidade = cid[novoCid].codigo_cidade;
             }
@@ -239,7 +240,7 @@ void lei_ind_guia(indice_guia idx_guia[], int cont){
 }
 
 int busca_guia ( indice_guia idx_guia[], guias guia[], int &cont, int cod){
-    int i = 0, f = cont;
+    int i = 0, f = cont-1;
     int m = (i + f) / 2;
     for (; f >= i && cod != idx_guia[m].codigo_guia; m = (i + f) / 2){
         if (cod > idx_guia[m].codigo_guia)
@@ -254,7 +255,7 @@ int busca_guia ( indice_guia idx_guia[], guias guia[], int &cont, int cod){
         cout << "\nNome: " << guia[i].nome;
         cout << "\nTelefone: " << guia[i].telefone;
         cout << "\nEndereco: "<< guia[i].endereco;
-        return m;
+        return i;
     }
     else
         cout << "\n\n Guia nao Encontrado";
@@ -274,14 +275,14 @@ void inclusao_guia(indice_guia idx[], guias guia[], int &cont, int cod){
     cin >> guia[cont].endereco;
 
     int i;
-    for (i = cont -1; idx[i].codigo_guia > cod ; i--) {
+    for (i = cont - 1; idx[i].codigo_guia > cod ; i--) {
         idx[i+1].codigo_guia = idx[i].codigo_guia;
         idx[i+1].ender = idx[i].ender;
     }
     idx[i+1].codigo_guia = cod;
     idx[i+1].ender = cont;
     cout << "\n\nInclusao realizada com Sucesso";
-};
+}
 
 void busca_inclu_guia ( indice_guia idx[], guias guia[], int &cont, int cod){
     int i = 0, f = cont;
@@ -303,14 +304,13 @@ void busca_inclu_guia ( indice_guia idx[], guias guia[], int &cont, int cod){
     }
     else
         inclusao_guia(idx, guia, cont, cod);
-    getch();
 }
 
-void leitura_pacote(pacote paco[],indice_guia indx[], guias guia[], int &cont){
+void leitura_pacote(pacote paco[],indice_guia indx[], guias guia[], int &cont, int &cont_guia){
     int i=0;
     int posicaoGuia;
     int novoGuia;
-    for (int saida = 1; i < 10 && saida !=0 ; i++) {
+    for (int saida = 1; i < 4 && saida !=0 ; i++) {
         cout <<"\n\nCodigo Pacote " <<(i+1) <<": ";
         cin >> paco[i].codigo_pacote;
         if(paco[i].codigo_pacote > 0){
@@ -318,11 +318,12 @@ void leitura_pacote(pacote paco[],indice_guia indx[], guias guia[], int &cont){
             cin >> paco[i].descricao;
             cout << "\nCodigo Guia: ";
             cin >> posicaoGuia;
-            novoGuia= busca_guia(indx,guia,cont ,posicaoGuia );
+            novoGuia= busca_guia(indx,guia,cont_guia ,posicaoGuia );
             if (novoGuia == -1) {
                 cout << "\n\nCodigo invalido";
+                cout << "\nCodigo Guia: ";
                 cin >> posicaoGuia;
-                novoGuia = busca_guia(indx,guia,cont ,posicaoGuia );
+                novoGuia = busca_guia(indx,guia,cont_guia ,posicaoGuia );
             }else{
                 paco[i].codigo_guia = guia[novoGuia].codigo_guia;
             }
@@ -350,7 +351,7 @@ void lei_ind_paco(indice_pacote idx_paco[], int cont){
 }
 
 int busca_paco ( indice_pacote idx_paco[], pacote paco[], int &cont, int cod){
-    int i = 0, f = cont;
+    int i = 0, f = cont-1;
     int m = (i + f) / 2;
     for (; f >= i && cod != idx_paco[m].codigo_pacote; m = (i + f) / 2){
         if (cod > idx_paco[m].codigo_pacote)
@@ -366,7 +367,8 @@ int busca_paco ( indice_pacote idx_paco[], pacote paco[], int &cont, int cod){
         cout << "\nValor por pessoa: "<< paco[i].valor_pessoa;
         cout << "\nTotal de pessoa: "<< paco[i].total_partic;
         cout << "\nQuantidade Maxima de pessoa: "<< paco[i].quant_maxPartic;
-        return m;
+
+        return i;
     }
     else
         cout << "\n\n Pacote nao Encontrado";
@@ -395,7 +397,7 @@ void inclusao_paco(indice_pacote idx[], pacote paco[], int &cont, int cod){
     idx[i+1].codigo_pacote = cod;
     idx[i+1].ender = cont;
     cout << "\n\nInclusao realizada com Sucesso";
-};
+}
 
 void busca_inclu_paco ( indice_pacote idx[], pacote paco[], int &cont, int cod){
     int i = 0, f = cont;
@@ -420,67 +422,62 @@ void busca_inclu_paco ( indice_pacote idx[], pacote paco[], int &cont, int cod){
     getch();
 }
 
-int  buscaGuia_excl(indice_guia idx[], guias guia[],indice_pacote idx_paco[], pacote paco[], int &cont, int &contPaco, int cod){
+void buscaGuia_exclu (indice_guia idx[], guias guia[], int &cont, int cod){
     int i = 0, f = cont;
     int m = (i + f) / 2;
-    for (; f >= i && cod != idx[m].codigo_guia ; m=(i+f)/2) {
+    for (; f >= i && cod != idx[m].codigo_guia; m = (i + f) / 2){
         if (cod > idx[m].codigo_guia)
             i = m + 1;
         else
             f = m - 1;
     }
     i = idx[m].ender;
-    int novoGuia;
-    novoGuia=busca_paco(idx_paco, paco, contPaco, cod);
-    guia[i].pacote = paco[novoGuia].codigo_pacote;
-    if ((cod == idx[m].codigo_guia) && guia[i].status == 0 && guia[i].pacote == 0){
+    if ((cod == idx[m].codigo_guia) && guia[i].status == 0){
         guia[i].status = 1;
-        cout << "\n\n Guia Excluido com Sucesso";
-        return m;
+        cout << "\n\n Cliente Excluido com Sucesso";
     }
     else
-        cout << "Guia nao cadastrado";
-    return -1;
+        cout << "Cliente nao cadastrado";
+    getch();
 }
 
-void reorg_guia ( indice_guia idx[], guias guia[], int &cont){
-    guias novoGuia[cont];
+void reorg_guia (struct indice_guia idx[], struct guias guia[], int &cont){
+    struct guias novo[cont];
     int j=-1;
     for (int k=0; k < cont; k++){
         int i = idx[k].ender;
         if (guia[i].status == 0){
             j++;
-            novoGuia[j] = guia[i];
-            idx[j].codigo_guia = novoGuia[j].codigo_guia;
+            novo[j] = guia[i];
+            idx[j].codigo_guia = novo[j].codigo_guia;
             idx[j].ender = j;
         }
     }
     cont = j+1;
     for (int k = 0; k < cont; k++){
         int i = idx[k].ender;
-        guia[k] = novoGuia [i];
+        guia[k] = novo [i];
     }
 }
 
-void exaustiva_guia(indice_guia idx[],  guias guia[], int cont){
+void exaustiva_guia (struct indice_guia idx[], struct guias guia[], int cont){
     for (int k=0; k < cont; k++){
         int i = idx[k].ender;
         if (guia[i].status == 0){
             cout << "\nEnd Fisico: " << i;
             cout << "\nNome: " << guia[i].nome;
-            cout << "\nEndereco: " << guia[i].endereco;
-            cout << "\nCidade: " << guia[i].codigo_cidade;
-            cout << "\nTelefone: " << guia[cont].telefone;
+            cout << "\tEndereco: " << guia[i].endereco;
+            cout << "\tCidade: " << guia[i].codigo_cidade;
+            cout << "\tTelefone: " << guia[i].telefone;
         }
     }
 }
 
-
-void leitura_cliente(cliente cli[],indice_cid indx[], cidade cid[], int &cont){
+void leitura_cliente(cliente cli[],indice_cid indx[], cidade cid[], int &cont, int &cont_cid){
     int i=0;
     int posicaoCid;
     int novoCid;
-    for (int saida = 1; i < 10 && saida !=0 ; i++) {
+    for (int saida = 1; i < 4 && saida !=0 ; i++) {
         cout <<"\n\nCodigo Cliente " <<(i+1) <<": ";
         cin >> cli[i].codigo_cliente;
         if(cli[i].codigo_cliente > 0){
@@ -488,11 +485,11 @@ void leitura_cliente(cliente cli[],indice_cid indx[], cidade cid[], int &cont){
             cin >> cli[i].nome;
             cout << "\nCodigo Cidade: ";
             cin >> posicaoCid;
-            novoCid= busca_cid(indx,cid,cont ,posicaoCid );
+            novoCid= busca_cid(indx,cid,cont_cid ,posicaoCid );
             if (novoCid == -1) {
                 cout << "\n\nCodigo invalido";
                 cin >> posicaoCid;
-                novoCid = busca_cid(indx,cid,cont ,posicaoCid );
+                novoCid = busca_cid(indx,cid,cont_cid ,posicaoCid );
             }else{
                 cli[i].codigo_cidade = cid[novoCid].codigo_cidade;
             }
@@ -516,7 +513,7 @@ void lei_ind_cli(indice_cliente idx_cli[], int cont){
 }
 
 int busca_cli ( indice_cliente idx_cli[], cliente cli[], int &cont, int cod){
-    int i = 0, f = cont;
+    int i = 0, f = cont-1;
     int m = (i + f) / 2;
     for (; f >= i && cod != idx_cli[m].codigo_cliente; m = (i + f) / 2){
         if (cod > idx_cli[m].codigo_cliente)
@@ -530,7 +527,7 @@ int busca_cli ( indice_cliente idx_cli[], cliente cli[], int &cont, int cod){
         cout << "\nCodigo da Cidade: " << cli[i].codigo_cidade;
         cout << "\nNome: " << cli[i].nome;
         cout << "\nEndereco: "<< cli[i].endereco;
-        return m;
+        return i;
     }
     else
         cout << "\n\n Cliente nao Encontrado";
@@ -579,40 +576,51 @@ void busca_inclu_cli ( indice_cliente idx[], cliente cli[], int &cont, int cod){
     getch();
 }
 
-void leitura_venda(venda venda[],indice_cliente indx[],indice_pacote idx[], cliente cli[], pacote paco[], int &cont){
+void leitura_venda(venda venda[],indice_cliente indx[],indice_pacote idx[], cliente cli[], pacote paco[], int &cont, int &cont_cli, int &cont_paco ){
     int i=0;
     int posicaoCli;
     int novoCli;
     int posicaoPaco;
     int novoPaco;
-    for (int saida = 1; i < 10 && saida !=0 ; i++) {
+    for (int saida = 1; i < 4 && saida !=0 ; i++) {
         cout <<"\n\nCodigo Venda " <<(i+1) <<": ";
         cin >> venda[i].codigo_venda;
         if(venda[i].codigo_venda > 0){
             cout << "\nCodigo Cliente: ";
             cin >> posicaoCli;
-            novoCli= busca_cli(indx,cli,cont ,posicaoCli );
+            novoCli= busca_cli(indx,cli,cont_cli ,posicaoCli );
             if (novoCli == -1) {
                 cout << "\n\nCodigo invalido";
                 cin >> posicaoCli;
-                novoCli = busca_cli(indx,cli,cont ,posicaoCli );
+                novoCli = busca_cli(indx,cli,cont_cli ,posicaoCli );
             }else{
                 venda[i].codigo_cliente = cli[novoCli].codigo_cliente;
             }
             cout << "\nCodigo Pacote: ";
             cin >> posicaoPaco;
-            novoPaco= busca_paco(idx,paco,cont ,posicaoPaco );
+            novoPaco= busca_paco(idx,paco,cont_paco ,posicaoPaco );
             if (novoPaco == -1) {
                 cout << "\n\nCodigo invalido";
                 cin >> posicaoPaco;
-                novoPaco= busca_paco(idx,paco,cont ,posicaoPaco );
+                novoPaco= busca_paco(idx,paco,cont_paco ,posicaoPaco );
             }else{
                 venda[i].codigo_pacote = paco[novoPaco].codigo_pacote;
             }
+
             cout << "\nQuantidade de pessoa: ";
             cin >> venda[i].quant_pessoa;
-            cout << "\nValor Ttoal: ";
-            cin >> venda[i].valor_total;
+            if((venda[i].quant_pessoa + paco[i].total_partic) <= paco[i].quant_maxPartic){
+            paco[i].total_partic = venda[i].quant_pessoa + paco[i].total_partic;
+            }else{
+                cout << "\nPassou quantidade maxima";
+                cout << "O numero maximo que pode colocar é: " << (paco[i].total_partic - paco[i].quant_maxPartic);
+                cout << "\nQuantidade de pessoa: ";
+                cin >> venda[i].quant_pessoa;
+            };
+
+            venda[i].valor_total = (paco[i].valor_pessoa * venda[i].quant_pessoa);
+            cout << "\nValor Total: " << venda[i].valor_total;
+
             paco[i].status=0;
         }
         else saida=0;
@@ -631,7 +639,7 @@ void lei_ind_venda(indice_venda idx_venda[], int cont){
 }
 
 int busca_venda ( indice_venda idx_venda[], venda vendas[], int &cont, int cod){
-    int i = 0, f = cont;
+    int i = 0, f = cont-1;
     int m = (i + f) / 2;
     for (; f >= i && cod != idx_venda[m].codigo_venda; m = (i + f) / 2){
         if (cod > idx_venda[m].codigo_venda)
@@ -647,13 +655,12 @@ int busca_venda ( indice_venda idx_venda[], venda vendas[], int &cont, int cod){
         cout << "\nCodigo Pacote: "<< vendas[i].codigo_pacote;
         cout << "\nQuantidade de pessoa: "<< vendas[i].quant_pessoa;
         cout << "\nValor Total: "<< vendas[i].valor_total;
-        return m;
+        return i;
     }
     else
         cout << "\n\n Venda nao Encontrado";
     return -1;
 }
-
 
 void inclusao_venda(indice_venda idx[], venda vendas[], int &cont, int cod){
     cont++;
@@ -755,28 +762,41 @@ void exaustiva_cli (indice_cliente idx[],  cliente cli[], int cont){
     }
 }
 
+void complet_vendido(indice_pacote idx_paco[], pacote paco[], int cont){
+    for(int i =0; i < cont && paco[i].total_partic == paco[i].quant_maxPartic; i++){
+        cout << "Codigo Pacote: " << paco[i].codigo_pacote;
+        cout << "Descricao: " << paco[i].descricao;
+        cout << "Codigo Guia: " << paco[i].codigo_guia;
+        cout << "Total arrecadado: " << (paco[i].total_partic * paco[i].valor_pessoa );
+    }
+}
 
 int main() {
-    paises pais[10]; indice_pais ind_pais[10];
-    cidade cidade[10]; indice_cid ind_cid[10];
-    guias guia[10];  indice_guia ind_guia[10];
-    cliente pessoa[10]; indice_cliente ind_cli[10];
-    pacote pacote[10]; indice_pacote ind_paco[10];
-    venda venda[10]; indice_venda ind_venda[10];
+    paises pais[20]; indice_pais ind_pais[20];
+    cidade cidade[20]; indice_cid ind_cid[20];
+    guias guia[20];  indice_guia ind_guia[20];
+    cliente pessoa[20]; indice_cliente ind_cli[20];
+    pacote pacote[20]; indice_pacote ind_paco[20];
+    venda venda[20]; indice_venda ind_venda[20];
+
     int cont_pais;
+
+    cout << "\nLeitura";
     leitura_pais(pais,cont_pais);
     cout <<"\nLeitura do Indice";
     lei_ind_pais(ind_pais,cont_pais);
 
     for (int codpesq = 9; codpesq != 0;){
-        cout << "\n\nInforme o Codigo do Pais a ser Buscado (0 para Encerrar): ";
-        cin >> codpesq;
-        if (codpesq != 0)
-            busca_pais( ind_pais, pais, cont_pais, codpesq);
+       cout << "\n\nInforme o Codigo do Pais a ser Buscado (0 para Encerrar): ";
+       cin >> codpesq;
+       if (codpesq != 0)
+           busca_pais( ind_pais, pais, cont_pais, codpesq);
     }
 
     int cont_cid;
-    leitura_cid(cidade,ind_pais,pais,cont_cid);
+
+    cout << "\nLeitura";
+    leitura_cid(cidade,ind_pais,pais,cont_cid, cont_pais);
     cout <<"\nLeitura do Indice";
     lei_ind_cid(ind_cid,cont_cid);
 
@@ -788,7 +808,9 @@ int main() {
     }
 
     int cont_guia, cont_paco;
-    leitura_guia(guia,ind_cid,cidade,cont_guia);
+
+    cout << "\nLeitura";
+    leitura_guia(guia,ind_cid,cidade,cont_guia, cont_cid);
     cout <<"\nLeitura do Indice";
     lei_ind_guia(ind_guia,cont_guia);
 
@@ -803,18 +825,21 @@ int main() {
         cout << "\n\nInforme o Codigo do Guia a ser Inclu do (0 para Encerrar): ";
         cin >> codpesq;
         if (codpesq != 0)
-           busca_inclu_guia(ind_guia, guia, cont_guia, codpesq);
+            busca_inclu_guia(ind_guia, guia, cont_guia, codpesq);
     }
 
-    leitura_pacote(pacote,ind_guia,guia,cont_paco);
+    cout << "\nLeitura";
+    leitura_pacote(pacote,ind_guia,guia,cont_paco, cont_guia);
     cout <<"\nLeitura do Indice";
     lei_ind_paco(ind_paco,cont_paco);
 
-    for (int codpesq = 9; codpesq != 0;){
-        cout << "\n\nInforme o Codigo do Pacote a ser Buscado (0 para Encerrar): ";
-        cin >> codpesq;
+    int y=0;
+   for(int codpesq = 9; codpesq != 0;){
+       cout << "\n\nInforme o Codigo do Pacote a ser Buscado (0 para Encerrar): ";
+       cin >> codpesq;
         if (codpesq != 0)
-            busca_paco( ind_paco, pacote, cont_paco, codpesq);
+           busca_paco( ind_paco, pacote, cont_paco, codpesq);
+        y= y+1;
     }
 
     for (int codpesq = 9; codpesq != 0;){
@@ -825,22 +850,25 @@ int main() {
     }
 
     for (int codpesq = 9; codpesq != 0;){
-        cout << "\n\nInforme o Codigo do Guia a ser Exclu do (0 para Encerrar): ";
+        cout << "\n\nInforme o Codigo do Guia a ser Excluido (0 para Encerrar): ";
         cin >> codpesq;
         if (codpesq != 0)
-            buscaGuia_excl(ind_guia, guia,ind_paco,pacote ,cont_guia,cont_paco ,codpesq);
+            buscaGuia_exclu(ind_guia, guia, cont_guia, codpesq);
     }
     cout << "\n\nLeitura Exaustiva dos Registros antes da Reorganizacao";
     exaustiva_guia(ind_guia, guia, cont_guia);
     getch();
 
-    reorg_guia( ind_guia, guia, cont_guia);
+    reorg_guia(ind_guia, guia, cont_guia);
 
     cout << "\n\nLeitura Exaustiva dos Registros depois da Reorganizacao";
     exaustiva_guia(ind_guia, guia, cont_guia);
+    getch();
 
     int cont_cli, cont_venda;
-    leitura_cliente(pessoa, ind_cid,cidade,cont_cli);
+
+    cout << "\nLeitura";
+    leitura_cliente(pessoa, ind_cid,cidade,cont_cli, cont_cid);
     cout <<"\nLeitura do Indice";
     lei_ind_cli(ind_cli,cont_cli);
 
@@ -858,16 +886,10 @@ int main() {
             busca_inclu_cli(ind_cli, pessoa, cont_cli, codpesq);
     }
 
-    leitura_venda(venda,ind_cli,ind_paco,pessoa,pacote,cont_venda);
+    cout << "\nLeitura";
+    leitura_venda(venda,ind_cli,ind_paco,pessoa,pacote,cont_venda, cont_cli, cont_paco);
     cout <<"\nLeitura do Indice";
     lei_ind_venda(ind_venda,cont_venda);
-
-    for (int codpesq = 9; codpesq != 0;){
-        cout << "\n\nInforme o Codigo da Venda a ser Buscado (0 para Encerrar): ";
-        cin >> codpesq;
-        if (codpesq != 0)
-            busca_venda( ind_venda, venda, cont_venda, codpesq);
-    }
 
     for (int codpesq = 9; codpesq != 0;){
         cout << "\n\nInforme o Codigo do Venda a ser Inclu do (0 para Encerrar): ";
@@ -875,6 +897,23 @@ int main() {
         if (codpesq != 0)
             busca_inclu_venda(ind_venda, venda, cont_venda, codpesq);
     }
+    int i =0;
+    float valor=0;
+    for (int codpesq = 9; i < codpesq ; i++){
+            busca_venda( ind_venda, venda, cont_venda, codpesq);
+            valor = valor + venda[i].valor_total;
+            if (i == codpesq){
+                cout << "\nValor Total da Venda" << valor;
+            }
+    }
+    float arrecadado=0;
+    for (int z = 9; z < y ; z++){
+            arrecadado = pacote[z].valor_pessoa * pacote[z].total_partic;
+        cout << "\nValor Total arrecadado" << arrecadado;
+
+    }
+
+    complet_vendido(ind_paco, pacote,cont_paco);
 
     for (int codpesq = 9; codpesq != 0;){
         cout << "\n\nInforme o Codigo do Cliente a ser Exclu do (0 para Encerrar): ";
